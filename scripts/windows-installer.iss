@@ -17,6 +17,7 @@ OutputBaseFilename=FramePilot-Setup-windows-x64
 Compression=lzma2/ultra64
 SolidCompression=yes
 WizardStyle=modern
+SetupIconFile=..\web\brand\framepilot.ico
 UninstallDisplayName=FramePilot
 CloseApplications=yes
 RestartApplications=no

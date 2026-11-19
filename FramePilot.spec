@@ -10,6 +10,7 @@ ffmpeg, ffprobe = static_ffmpeg_run.get_or_fetch_platform_executables_else_raise
 datas = [(str(root / "web"), "web"), (str(root / "studio" / "fonts"), "studio/fonts")]
 binaries = [(ffmpeg, "ffmpeg/bin"), (ffprobe, "ffmpeg/bin")]
 hiddenimports = ["studio.server"]
+exe_icon = str(root / "web" / "brand" / "framepilot.ico") if sys.platform == "win32" else None
 
 for package in (
     "fastapi", "starlette", "uvicorn", "httpx", "sqlalchemy", "numpy", "PIL",
@@ -47,6 +48,7 @@ exe = EXE(
     console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
+    icon=exe_icon,
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
