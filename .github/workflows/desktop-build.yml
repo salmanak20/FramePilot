@@ -37,10 +37,13 @@ jobs:
         run: python -m pip install --upgrade pip && python -m pip install -r requirements-desktop.txt ${{ runner.os == 'Linux' && 'PyGObject' || '' }}
       - name: Build the desktop app
         run: pyinstaller --clean --noconfirm FramePilot.spec
-      - name: Package Windows download
+      - name: Install Inno Setup
+        if: runner.os == 'Windows'
+        run: choco install innosetup --yes --no-progress
+      - name: Build Windows installer
         if: runner.os == 'Windows'
         shell: pwsh
-        run: Compress-Archive -Path dist/FramePilot -DestinationPath FramePilot-${{ matrix.target }}.zip
+        run: iscc /DAppVersion=${{ github.ref_name }} scripts/windows-installer.iss
       - name: Package macOS download
         if: runner.os == 'macOS'
         run: ditto -c -k --sequesterRsrc --keepParent dist/FramePilot.app FramePilot-${{ matrix.target }}.zip
@@ -48,6 +51,14 @@ jobs:
         if: runner.os == 'Linux'
         run: tar -czf FramePilot-${{ matrix.target }}.tar.gz -C dist FramePilot
       - uses: actions/upload-artifact@v4
+        if: runner.os == 'Windows'
+        with:
+          name: FramePilot-${{ matrix.target }}
+          path: FramePilot-Setup-windows-x64.exe
+          if-no-files-found: error
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        if: runner.os != 'Windows'
         with:
           name: FramePilot-${{ matrix.target }}
           path: FramePilot-${{ matrix.target }}.*

@@ -11,7 +11,7 @@ FramePilot turns long videos and live streams into **captioned vertical clips** 
 
 Download the latest build from [FramePilot Releases](https://github.com/salmanak20/FramePilot/releases/latest). Choose the file for your computer:
 
-- **Windows 10/11:** Download and extract `FramePilot-windows-x64.zip`, then open the `FramePilot` folder and double-click `FramePilot.exe`. If SmartScreen appears, choose **More info**, then **Run anyway**.
+- **Windows 10/11:** Download and run `FramePilot-Setup-windows-x64.exe`. If SmartScreen appears, choose **More info**, then **Run anyway**. The installer adds FramePilot to your Start menu and desktop.
 - **macOS:** Download the Intel or Apple Silicon build that matches your Mac. Open the ZIP and drag `FramePilot.app` to Applications. The first time, Control-click the app and choose **Open** to confirm you want to run it.
 - **Linux x64:** Install the desktop libraries with `sudo apt install libgtk-3-0 libwebkit2gtk-4.1-0`, extract `FramePilot-linux-x64.tar.gz`, then run `./FramePilot/FramePilot`.
 
