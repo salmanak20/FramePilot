@@ -4,7 +4,7 @@ FramePilot sends a clip to n8n only after you choose **Approve & publish** or ap
 
 ## Workflow contract
 
-Create a **Webhook** trigger using `POST` and the Production URL. FramePilot sends JSON with this shape:
+Create a **Webhook** trigger using `POST` and the Production URL. FramePilot sends a `multipart/form-data` request with a JSON string in the `payload` field and the approved clip file in the `video` binary field. Parse `payload` as JSON; it has this shape:
 
 ```json
 {
@@ -16,13 +16,12 @@ Create a **Webhook** trigger using `POST` and the Production URL. FramePilot sen
   "title": "clip title",
   "caption": "post description and tags",
   "hashtags": ["Shorts"],
-  "videoUrl": "signed one-hour video URL",
   "approvedAt": 0,
   "privacy": "public | unlisted | private"
 }
 ```
 
-Use `postId` as an idempotency key in the workflow so a retry does not create a duplicate post. Download `videoUrl` before it expires, then route by `platform` and upload with credentials configured in n8n. Platform API access, review, account type, and publishing limits are controlled by each social network. The connected account IDs are labels for routing; n8n needs its own authorized credentials for each destination.
+Use `postId` as an idempotency key in the workflow so a retry does not create a duplicate post. Route by `platform` and upload the incoming `video` binary with credentials configured in n8n. Platform API access, review, account type, and publishing limits are controlled by each social network. The connected account IDs are labels for routing; n8n needs its own authorized credentials for each destination. Larger clips may exceed n8n's default webhook body limit; raise `N8N_PAYLOAD_SIZE_MAX` on your n8n instance if needed.
 
 For a synchronous workflow, finish the upload before responding to the webhook. Return JSON such as:
 
@@ -35,7 +34,7 @@ FramePilot records the post as published from this response. If the workflow can
 ## Reliability and safety
 
 - Keep the workflow URL private and use HTTPS. The optional bearer token is stored with the user's local settings and sent in the `Authorization` header.
-- Each video link is signed, private, and valid for one hour. For scheduled posts, the timer starts when FramePilot sends the approved post to n8n.
+- FramePilot streams the approved video directly to n8n after approval; it does not expose a local desktop file or require a public URL.
 - FramePilot provides an `Idempotency-Key` header and `postId` in the body. Use these to avoid duplicate uploads if a network timeout causes a retry.
 - n8n requests have a three-minute timeout. Network and workflow failures are retried after ten minutes, for three attempts total, with the same post ID; after that, the queue shows a failure and offers a manual retry.
 - The app can pause all scheduled publishing. Clips waiting for approval do not publish until you approve them.

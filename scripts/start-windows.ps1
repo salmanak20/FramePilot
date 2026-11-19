@@ -1,6 +1,6 @@
 # FramePilot - one-click start for Windows.
 # First run: installs Python and ffmpeg if missing (with winget), sets up a private Python folder (.venv)
-# and the packages. Every run: starts FramePilot and opens it in your browser.
+# and desktop packages. Every run: opens FramePilot in its own window.
 $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent $PSScriptRoot
 Set-Location $Root
@@ -52,20 +52,6 @@ if ($Py.Count -eq 0) {
 $PyExe = $Py[0]; $PyArgs = @($Py | Select-Object -Skip 1)
 Say ("Python: " + (& $PyExe @PyArgs --version)) "Gray"
 
-# ---- ffmpeg (FramePilot also finds winget's install folder by itself, so no PATH refresh is needed)
-$haveFfmpeg = [bool](Get-Command ffmpeg -ErrorAction SilentlyContinue) -or
-    (Test-Path "$env:LOCALAPPDATA\Microsoft\WinGet\Links\ffmpeg.exe") -or
-    [bool](Get-ChildItem "$env:LOCALAPPDATA\Microsoft\WinGet\Packages" -Filter "Gyan.FFmpeg*" -Directory -ErrorAction SilentlyContinue)
-if (-not $haveFfmpeg) {
-    Say "ffmpeg not found. Installing it..." "Cyan"
-    if (Has-Winget) {
-        winget install -e --id Gyan.FFmpeg --accept-package-agreements --accept-source-agreements
-        Refresh-Path
-    } else {
-        Say "winget is not available: FramePilot will show how to install ffmpeg in the dashboard." "Yellow"
-    }
-}
-
 # ---- Private Python folder + packages (only reinstalled when requirements.txt changes)
 $Venv = Join-Path $Root ".venv"
 $VPy = Join-Path $Venv "Scripts\python.exe"
@@ -75,47 +61,19 @@ if (-not (Test-Path $VPy)) {
     if ($LASTEXITCODE -ne 0) { Fail "Could not create the Python environment." }
 }
 $Stamp = Join-Path $Venv "requirements.sha"
-$Hash = (Get-FileHash (Join-Path $Root "requirements.txt") -Algorithm SHA256).Hash
+$Hash = (Get-FileHash (Join-Path $Root "requirements-desktop.txt") -Algorithm SHA256).Hash
 if (-not (Test-Path $Stamp) -or (Get-Content $Stamp -Raw).Trim() -ne $Hash) {
     Say "Installing packages (one time, a few minutes)..." "Cyan"
     & $VPy -m pip install --upgrade pip --disable-pip-version-check -q
-    & $VPy -m pip install -r requirements.txt --disable-pip-version-check
+    & $VPy -m pip install -r requirements-desktop.txt --disable-pip-version-check
     if ($LASTEXITCODE -ne 0) { Fail "Installing packages failed. Check your internet connection and run this again." }
     Set-Content -Path $Stamp -Value $Hash
 }
 
-# ---- Start
+# ---- Start the native desktop window
 Write-Host ""
-Say "Starting FramePilot. The first start downloads the speech model (about 480 MB, once)." "Green"
-Say "Your browser opens by itself. Keep this window open while you use FramePilot; close it to stop." "Green"
+Say "Opening FramePilot. The first start downloads the speech model (about 480 MB, once)." "Green"
+Say "Close the FramePilot window when you are finished." "Green"
 Write-Host ""
-$env:CLIPKONTRAST_OPEN_BROWSER = "1"
 $env:PYTHONWARNINGS = "ignore::DeprecationWarning"
-
-# ---- Already running? Then just open it. Port taken by another program? Then use the next free one.
-function Port-Free($p) {
-    try { $l = [System.Net.Sockets.TcpListener]::new([System.Net.IPAddress]::Loopback, $p); $l.Start(); $l.Stop(); return $true }
-    catch { return $false }
-}
-function Is-FramePilot($p) {
-    try {
-        $r = Invoke-WebRequest -UseBasicParsing -TimeoutSec 3 -Uri "http://127.0.0.1:$p/app"
-        return ($r.Content -match "FramePilot")
-    } catch { return $false }
-}
-$Port = 8765
-if ($env:CLIPKONTRAST_PORT) { $Port = [int]$env:CLIPKONTRAST_PORT }
-for ($p = $Port; $p -lt $Port + 10; $p++) {
-    if (Is-FramePilot $p) {
-        Say "FramePilot is already running (in another window). Opening it in your browser." "Green"
-        Start-Process "http://127.0.0.1:$p/app"
-        exit 0
-    }
-}
-while (-not (Port-Free $Port)) {
-    Say "Port $Port is used by another program, trying $($Port + 1)..." "Yellow"
-    $Port++
-    if ($Port -gt 8800) { Fail "No free port found between 8765 and 8800. Restart the computer and try again." }
-}
-$env:CLIPKONTRAST_PORT = "$Port"
-& $VPy -m studio.server
+& $VPy -m studio.desktop

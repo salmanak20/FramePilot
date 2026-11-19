@@ -1345,7 +1345,15 @@ def connect_start(platform: str):
     if platform not in accounts.PLATFORM_NAMES:
         raise HTTPException(404)
     try:
-        return RedirectResponse(accounts.connect_url(platform), 303)
+        destination = accounts.connect_url(platform)
+        if config.env("FRAMEPILOT_DESKTOP") == "1":
+            import webbrowser
+            webbrowser.open(destination)
+            return HTMLResponse("""<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+                <title>Continue in your browser | FramePilot</title><body style="font:16px system-ui;max-width:560px;margin:12vh auto;padding:24px;color:#201f19">
+                <h1>Continue in your browser</h1><p>Finish connecting your account in the browser window that just opened, then return to FramePilot.</p>
+                <p>You can close this tab after the account is connected.</p></body></html>""")
+        return RedirectResponse(destination, 303)
     except ValueError as e:
         return _back(connect_error=str(e))
 

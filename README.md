@@ -3,55 +3,43 @@
 > Based on [PeakCut](https://github.com/haziqahmedqasmi/peakcut) (MIT License). Rebranded and modified as FramePilot.
 >
 > Guide by [@anistroz.ai](https://www.instagram.com/anistroz.ai/) (Instagram) and [@anistrozelite](https://www.youtube.com/@anistrozelite) (YouTube).
-> Screenshots ke saath poori guide: folder mein **`SETUP-GUIDE.html`** kholo.
+> Open **`SETUP-GUIDE.html`** for the desktop setup guide.
 
-Lambi videos aur live streams se **captions wale vertical clips** (Reels / Shorts / TikTok) banao, apne hi computer pe.
-Free hai, koi sign-in nahi chahiye. Publish karne se pehle har post aap approve karte hain.
+FramePilot turns long videos and live streams into **captioned vertical clips** for Reels, Shorts and TikTok. It runs in a desktop window on your computer, is free and open source, and does not require a FramePilot sign-in. You approve every post before it is published.
 
-## Apne PC pe kaise chalaye (3 steps)
+## Download and install
 
-**1. Download karo.** Upar hare **Code** button pe click karo, phir **Download ZIP**.
+Download the latest build from [FramePilot Releases](https://github.com/salmanak20/FramePilot/releases/latest). Choose the file for your computer:
 
-**2. Unzip karo, chhote folder mein.**
-- **Windows:** ZIP pe right-click karo, phir **Extract All**, aur folder ko `C:\FramePilot` pe rakho.
-  Desktop ya Downloads ke andar gehre folder mein mat rakhna: Windows lambe path pe speech model load nahi kar paata.
-- **Mac:** ZIP pe double-click karo aur folder ko apne home folder mein rakh do.
+- **Windows 10/11:** Download and extract `FramePilot-windows-x64.zip`, then open the `FramePilot` folder and double-click `FramePilot.exe`. If SmartScreen appears, choose **More info**, then **Run anyway**.
+- **macOS:** Download the Intel or Apple Silicon build that matches your Mac. Open the ZIP and drag `FramePilot.app` to Applications. The first time, Control-click the app and choose **Open** to confirm you want to run it.
+- **Linux x64:** Install the desktop libraries with `sudo apt install libgtk-3-0 libwebkit2gtk-4.1-0`, extract `FramePilot-linux-x64.tar.gz`, then run `./FramePilot/FramePilot`.
 
-**3. Start karo.**
-- **Windows:** `Start-FramePilot-Windows.bat` pe double-click karo.
-  "Windows protected your PC" aaye toh **More info** dabao, phir **Run anyway**.
-- **Mac:** `Start-FramePilot-Mac.command` pe right-click karo, phir **Open**, phir dobara **Open** (pehli baar hi aisa karna hai).
-- **Linux:** terminal mein `bash start-linux.sh` chalao.
+FramePilot opens in its own desktop window; no browser, Python or separate FFmpeg install is needed. The first launch downloads the speech model (about 480 MB). Keep an internet connection available until setup finishes. Your clips, videos, settings and model are kept in your computer's FramePilot data folder. When you approve a post, its video is sent to the connected platform or to your configured n8n workflow.
 
-Pehli baar 5-10 minute lagenge: script khud Python, ffmpeg aur baaki zaroori cheezein install karegi, aur speech model
-(lagbhag 480 MB) download karegi. Phir browser apne aap khul jayega. Agli baar se bas wahi file double-click karni hai,
-aur app kuch hi second mein khul jayega.
+### Add an AI key (optional)
 
-Jab tak app use kar rahe ho, kaali window (terminal) khuli rakhna. Use band karoge toh app bhi band ho jayega.
+FramePilot can make clips without an AI key by choosing moments from speech and audio levels. For AI-selected moments and suggested titles:
 
-### AI key daalo (free, 2 minute)
+1. Go to [Google AI Studio](https://aistudio.google.com/apikey) and choose **Create API key**.
+2. In FramePilot, open **Settings → AI**, choose **Gemini**, paste the key, and select **Save and test**.
 
-AI key ke bina bhi clips bante hain, lekin sirf awaaz ki loudness dekh ke. Achhe clips ke liye:
+Then paste a YouTube, Twitch or Kick link and choose **Make clips**. The transcript is sent to the AI provider you selected; video processing and clip rendering run on your computer.
 
-1. https://aistudio.google.com/apikey pe jao aur **Create API key** dabao (Google ki free key).
-2. FramePilot mein **Settings, AI** kholo, **Gemini** chuno, key paste karo, aur **Save and test** dabao.
+### Troubleshooting
 
-Phir YouTube, Twitch ya Kick ka link paste karo aur **Make clips** dabao.
+| Problem | What to do |
+| --- | --- |
+| The app does not open | Restart FramePilot. If port 8765 is already in use, close the other app using it and try again. |
+| Speech model download fails | Check your internet connection and free disk space, then restart FramePilot. |
+| Linux cannot open a window | Install GTK 3 and WebKitGTK 4.1 using your distribution's package manager. |
+| Social account connection does not finish | Finish signing in in your system browser, then return to FramePilot. |
 
-### Kuch problem aaye toh
+## Development server
 
-| Problem | Kya karein |
-|---|---|
-| "winget is not available" | Microsoft Store se **App Installer** install karo, phir dobara chalao |
-| "DLL load failed ... too long" | Folder ko `C:\FramePilot` pe le jao aur dobara chalao |
-| Python install ke baad error | Window band karo aur `.bat` file dobara double-click karo |
-| Browser nahi khula | Khud kholo: http://127.0.0.1:8765 |
-| Mac: "cannot be opened" | Right-click karo, phir **Open** (double-click nahi) |
+The downloadable release is a desktop app. Developers can also run the local web server directly. This requires Python 3.10 or newer and FFmpeg. On Windows, install FFmpeg with `winget install Gyan.FFmpeg`; on macOS use `brew install ffmpeg`; on Linux use `sudo apt install ffmpeg`.
 
-Zaroorat: Windows 10/11, macOS ya Linux, 8 GB RAM, lagbhag 3 GB khaali jagah. Video banne ka kaam tumhare
-computer pe hota hai, aur tumhari videos kahin upload nahi hoti.
-
----
+Clone the repository into a short folder that stays put, such as `C:\\FramePilot` on Windows or `~/FramePilot` on macOS and Linux. Install the Python packages with `pip install -r requirements.txt`, then start the development server with `python -m studio.server`. Open `http://127.0.0.1:8765` in a browser. The first start downloads the speech model (about 480 MB).
 
 ## For developers
 
@@ -80,7 +68,7 @@ creator's live stream and clip the highlights while the stream is still running.
 ## n8n publishing
 
 Add your n8n production webhook in **Settings → Connected apps**. FramePilot sends an approved post with its title,
-caption, destination and a signed video link that expires after one hour. Configure the platform credentials and upload
+caption, destination and the video file attached. Configure the platform credentials and upload
 steps in n8n; social networks control API access, review, account type and publishing limits. For full completion tracking,
 have the workflow finish the upload before replying with `{"status":"posted","url":"…","remote_id":"…"}`. A normal
 successful webhook response is shown as **Sent to n8n**, not as confirmed published. Use the stable post ID to prevent

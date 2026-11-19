@@ -119,9 +119,11 @@ def _post(p):
             payload = {"event": "framepilot.clip.approved", "postId": p["id"], "platform": acc["platform"],
                        "accountId": acc["id"], "accountName": acc["name"], "title": title,
                        "caption": cap, "hashtags": clip.get("hashtags", []),
-                       "videoUrl": accounts.clip_link(job["id"], path.name, 3600),
                        "approvedAt": p.get("approved_at", p.get("created", time.time())), "privacy": creator["privacy"]}
-            response = httpx.post(settings["n8n_url"], json=payload, headers=headers, timeout=180)
+            with path.open("rb") as video:
+                response = httpx.post(settings["n8n_url"], data={"payload": json.dumps(payload)},
+                                      files={"video": (path.name, video, "video/mp4")},
+                                      headers=headers, timeout=180)
             if not 200 <= response.status_code < 300:
                 raise RuntimeError(f"n8n webhook returned HTTP {response.status_code}.")
             try:

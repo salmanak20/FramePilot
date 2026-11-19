@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # FramePilot - one-click start for Mac and Linux.
-# First run: checks Python and ffmpeg (installs them with Homebrew on a Mac when possible), sets up a private
-# Python folder (.venv) and the packages. Every run: starts FramePilot and opens it in your browser.
+# First run: checks Python and sets up a private Python folder (.venv) and desktop packages.
+# Every run opens FramePilot in its own desktop window.
 set -e
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
@@ -40,49 +40,24 @@ if [ -z "$PY" ]; then
 fi
 say "Python: $($PY --version)"
 
-if ! command -v ffmpeg >/dev/null 2>&1; then
-  if [ "$(uname)" = "Darwin" ] && command -v brew >/dev/null 2>&1; then
-    say "ffmpeg not found. Installing it with Homebrew..."
-    brew install ffmpeg
-  elif [ "$(uname)" = "Darwin" ]; then
-    say "ffmpeg not found. Install Homebrew from https://brew.sh then run: brew install ffmpeg"
-  else
-    say "ffmpeg not found. Install it with: sudo apt install ffmpeg"
-  fi
-fi
-
 if [ ! -x .venv/bin/python ]; then
   say "Setting up (one time)..."
   "$PY" -m venv .venv || fail "Could not create the Python environment (on Linux: sudo apt install python3-venv)."
 fi
-HASH="$("$PY" -c 'import hashlib,sys; print(hashlib.sha256(open("requirements.txt","rb").read()).hexdigest())')"
+HASH="$("$PY" -c 'import hashlib,sys; print(hashlib.sha256(open("requirements-desktop.txt","rb").read()).hexdigest())')"
 if [ ! -f .venv/requirements.sha ] || [ "$(cat .venv/requirements.sha)" != "$HASH" ]; then
   say "Installing packages (one time, a few minutes)..."
   .venv/bin/python -m pip install --upgrade pip --disable-pip-version-check -q
-  .venv/bin/python -m pip install -r requirements.txt --disable-pip-version-check || fail "Installing packages failed. Check your internet connection and run this again."
+  .venv/bin/python -m pip install -r requirements-desktop.txt --disable-pip-version-check || fail "Installing packages failed. Check your internet connection and run this again."
+  if [ "$(uname)" != "Darwin" ]; then
+    .venv/bin/python -m pip install PyGObject --disable-pip-version-check || fail "Install the Linux GTK and WebKit development libraries, then run FramePilot again."
+  fi
   echo "$HASH" > .venv/requirements.sha
 fi
 
 echo
-say "Starting FramePilot. The first start downloads the speech model (about 480 MB, once)."
-say "Your browser opens by itself. Keep this window open while you use FramePilot; close it to stop."
+say "Opening FramePilot. The first start downloads the speech model (about 480 MB, once)."
+say "Close the FramePilot window when you are finished."
 echo
-export CLIPKONTRAST_OPEN_BROWSER=1
 export PYTHONWARNINGS="ignore::DeprecationWarning"
-
-# Already running? Then just open it. Port taken by another program? Then use the next free one.
-open_url() { if command -v open >/dev/null 2>&1; then open "$1"; elif command -v xdg-open >/dev/null 2>&1; then xdg-open "$1"; fi; }
-PORT="${CLIPKONTRAST_PORT:-8765}"
-for p in $(seq "$PORT" $((PORT + 9))); do
-  if .venv/bin/python -c "import sys,urllib.request; sys.exit(0 if b'FramePilot' in urllib.request.urlopen('http://127.0.0.1:$p/app', timeout=3).read() else 1)" 2>/dev/null; then
-    say "FramePilot is already running (in another window). Opening it in your browser."
-    open_url "http://127.0.0.1:$p/app"; exit 0
-  fi
-done
-while ! .venv/bin/python -c "import socket,sys; s=socket.socket(); s.bind(('127.0.0.1',$PORT)); s.close()" 2>/dev/null; do
-  say "Port $PORT is used by another program, trying $((PORT + 1))..."
-  PORT=$((PORT + 1))
-  [ "$PORT" -le 8800 ] || fail "No free port found between 8765 and 8800."
-done
-export CLIPKONTRAST_PORT="$PORT"
-exec .venv/bin/python -m studio.server
+exec .venv/bin/python -m studio.desktop

@@ -2123,10 +2123,10 @@ async function drawSettings() {
           ${card("instagram", "Instagram", ig, "linear-gradient(45deg,#F58529,#DD2A7B,#8134AF)", "Post clips as Reels. Needs a Creator or Business account.")}
           ${card("tiktok", "TikTok", tt, "#000", "Post clips straight to your TikTok.")}
         </div></section>
-        <section class="set-sec"><h2>n8n publishing</h2><p class="help">After you approve a clip, FramePilot can send its details and a temporary video link to your n8n webhook. Add your platform credentials and upload steps in n8n. The webhook must be reachable over HTTPS and return JSON with <code>{"status":"posted","url":"…"}</code> when publishing finishes. A regular 2xx response is recorded as sent to n8n.</p>
+        <section class="set-sec"><h2>n8n publishing</h2><p class="help">After you approve a clip, FramePilot sends its details and the video file to your n8n webhook. Add your platform credentials and upload steps in n8n. The webhook must be reachable over HTTPS and return JSON with <code>{"status":"posted","url":"…"}</code> when publishing finishes. A regular 2xx response is recorded as sent to n8n.</p>
           <div class="card"><div class="fields"><label class="f span">Production webhook URL<input id="n8n_url" type="url" value="${esc(n8n.n8n_url || "")}" placeholder="https://n8n.example.com/webhook/framepilot" autocomplete="url"></label>
             <label class="f span">Optional webhook bearer token<input id="n8n_token" type="password" placeholder="${n8n.n8n_token ? "Saved. Paste a new token to replace it" : "Leave blank if your webhook does not require one"}" autocomplete="new-password"></label></div>
-            <p class="sub">The video link expires after one hour. Queue delays start that hour when the approved post is sent. Keep n8n and FramePilot reachable from each other.</p>
+            <p class="sub">For scheduled posts, the clip is uploaded when its approved queue time arrives. Keep n8n reachable while publishing runs.</p>
             <button class="btn primary" data-act="n8nsave">Save n8n settings</button></div></section>`;
     }
   } catch (e) { body.innerHTML = `<div class="set-load">${esc(e.message)}</div>`; }
