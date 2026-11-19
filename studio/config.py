@@ -159,10 +159,9 @@ SESSION_DAYS = int(env("CLIPKONTRAST_SESSION_DAYS", "30"))
 # on your own computer. On a server that other people can reach, set CLIPKONTRAST_ACCOUNTS=1: everyone then signs up
 # and signs in, and each person only sees their own videos.
 ACCOUNTS = env("CLIPKONTRAST_ACCOUNTS", "0") == "1"
-# The two buttons along the top of the dashboard: the project's code, and where to follow its maker (feedback goes
-# there too). Set either to an empty value to hide that button, or point them at your own pages in a fork.
-REPO_URL = env("CLIPKONTRAST_REPO_URL", "https://github.com/anistroz/Agak").strip()
-FOLLOW_URL = env("CLIPKONTRAST_FOLLOW_URL", "https://www.instagram.com/anistroz.ai/").strip()
+# Link to the FramePilot project. Set this to an empty value to hide the button in a fork.
+REPO_URL = env("CLIPKONTRAST_REPO_URL", "https://github.com/salmanak20/FramePilot").strip()
+FOLLOW_URL = ""
 
 # ---------------------------------------------------------------- limits (per user, and for the whole server)
 # Your own FramePilot has no limits unless you set them: 0 (the default) means "none" for every limit below. The

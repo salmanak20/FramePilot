@@ -1167,7 +1167,7 @@ function openAcct() {
   const u = S.status.user;
   const on = S.status.accounts !== false;
   p.innerHTML = `${on ? `<div class="who2"><b>${esc(u.name)}</b><span>${esc(u.email)}</span></div>` : ""}
-    <button data-act="go" data-v="settings">${ic("cog")}Settings</button><button data-act="go" data-v="usage">${ic("chart")}AI usage</button><button data-act="tour">${ic("play")}Take the tour</button>${S.status.links?.follow ? `<button data-act="feedback">${ic("chat")}Send feedback</button>` : ""}
+    <button data-act="go" data-v="settings">${ic("cog")}Settings</button><button data-act="go" data-v="usage">${ic("chart")}AI usage</button><button data-act="tour">${ic("play")}Take the tour</button>${S.status.links?.repo ? `<button data-act="feedback">${ic("chat")}Send feedback</button>` : ""}
     ${on ? `<button class="danger" data-act="logout">${ic("signout")}Sign out</button>` : ""}`;
   openPop(p, $("[data-act=acctmenu]"));
 }
@@ -1212,12 +1212,12 @@ async function checkNew(first) {
     lastNotice = Math.max(lastNotice, top); localStorage.setItem("lastNotice", lastNotice);
   } catch {}
 }
-/* feedback goes to the maker's Instagram. A problem's message is copied first, so it can be pasted there. */
+/* Feedback opens the project's issue page; copy error details first when available. */
 async function openFeedback(kind = "bug", context = "") {
-  const url = S.status?.links?.follow;
-  if (!url) return toast(context ? "Copy this message and open an issue on GitHub." : "There's no feedback link on this server.");
-  if (context) { try { await navigator.clipboard.writeText(context); toast("The problem is copied. Paste it in your message.", "ok"); } catch {} }
-  window.open(url, "_blank", "noopener");
+  const repo = S.status?.links?.repo;
+  if (context) { try { await navigator.clipboard.writeText(context); toast("The problem details were copied.", "ok"); } catch {} }
+  if (!repo) return toast("Set the project URL to open its feedback page.");
+  window.open(`${repo.replace(/\/$/, "")}/issues/new`, "_blank", "noopener");
 }
 function updateHow() {
   const up = S.status?.update, d = $("#formdlg"); if (!up || d.open) return;
@@ -1284,8 +1284,7 @@ function drawShell() {  const nav = (v, icon, label, extra = "") => `<button cla
   }
   if (S.view === "overview" || S.view === "library") {
     const L = S.status.links || {};
-    act = (L.repo ? `<a class="btn" href="${esc(L.repo)}" target="_blank" rel="noopener" title="Star FramePilot on GitHub">${ic("github")}<span>Star<span class="long"> on GitHub</span></span></a>` : "")
-        + (L.follow ? `<a class="btn primary" href="${esc(L.follow)}" target="_blank" rel="noopener" title="Follow the maker of FramePilot on Instagram">${ic("instagram")}Follow me</a>` : "");
+    act = L.repo ? `<a class="btn" href="${esc(L.repo)}" target="_blank" rel="noopener" title="View FramePilot on GitHub">${ic("github")}<span>GitHub</span></a>` : "";
   }
   const me = S.status.user;
   const kk = S.status.ai;
