@@ -9,7 +9,7 @@ root = Path(SPECPATH)
 ffmpeg, ffprobe = static_ffmpeg_run.get_or_fetch_platform_executables_else_raise()
 datas = [(str(root / "web"), "web"), (str(root / "studio" / "fonts"), "studio/fonts")]
 binaries = [(ffmpeg, "ffmpeg/bin"), (ffprobe, "ffmpeg/bin")]
-hiddenimports = []
+hiddenimports = ["studio.server"]
 
 for package in (
     "fastapi", "starlette", "uvicorn", "httpx", "sqlalchemy", "numpy", "PIL",
