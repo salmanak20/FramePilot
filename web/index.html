@@ -10,13 +10,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@300&family=Archivo+Black&family=Anton&family=Poppins:wght@800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --brand:#C6F432;--brand-press:#B5E31F;--brand-ink:#1A2100;--brand-soft:#F5FDE0;--brand-line:#E3F7A8;--brand-deep:#4E6B00;
-  --frame:#1E1612;--frame-2:#2C221D;--frame-line:rgba(255,255,255,.08);--frame-text:#F4EEEA;--frame-dim:#A99A91;
-  --bg:#FFFFFF;--muted:#F7F4F1;--line:#EEE8E4;--line-2:#E1D9D3;
-  --text:#211813;--dim:#6D6159;--faint:#A0948C;
-  --good:#0F8A57;--good-soft:#E6F6EE;--bad:#D3343F;--bad-soft:#FDECEE;--live:#E5323F;
+  --brand:#C6F432;--brand-press:#B5E31F;--brand-ink:#1A2100;--brand-soft:#27341E;--brand-line:#46582F;--brand-deep:#C6F432;
+  --frame:#0C1114;--frame-2:#161D21;--frame-line:rgba(255,255,255,.09);--frame-text:#EDF3EB;--frame-dim:#9AA69D;
+  --bg:#10161A;--muted:#171F24;--line:#273139;--line-2:#354149;
+  --text:#EAF0E8;--dim:#A2AEA5;--faint:#78847B;
+  --good:#58D39A;--good-soft:#17372A;--bad:#FF7B84;--bad-soft:#3C2226;--live:#E5323F;
   --r-lg:16px;--r:12px;--r-sm:8px;
-  color-scheme:light;
+  color-scheme:dark;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -812,6 +812,127 @@ dialog[open]{animation:fadein .16s ease}
   .set-sec h2{font-size:16px}
   .ai-big{font-size:24px}
 }
+/* ---------- creator studio workspace */
+main#main{background:#0d1317;color:#edf3eb}
+.topbar{background:#0d1317}
+.topbar h1{color:#edf3eb}
+.topbar p{color:#9aa69d}
+.topbar.stuck,.topbar.tabbed{border-color:#263138}
+.topbar.tabbed .utabs{background:#171f24}
+.utabs .tabbtn{color:#9aa69d}
+.utabs .tabbtn:hover{background:#202a30;color:#eef3ec}
+.utabs .tabbtn.on{color:#18200c}
+.utabs .ind{background:var(--brand)}
+.studio-hero{padding:24px 32px 8px;background:#0d1317;border:0}
+.studio-intro{display:flex;align-items:end;justify-content:space-between;gap:16px;max-width:1220px;margin:0 auto 18px}
+.studio-intro h2{font-size:30px;line-height:1.15;letter-spacing:-.04em;color:#eef4eb;margin-top:5px}
+.studio-intro p{color:#a1aca2;margin-top:6px;font-size:13px}
+.studio-eyebrow{display:block;color:#a5c86c;font-size:10px;letter-spacing:.13em;font-weight:700}
+.studio-new{background:#182019;color:#d7f99a;border-color:#33452b}
+.studio-hero .composer.big{max-width:1220px;margin:0 auto;background:#151c21;border-color:#2b363d}
+.studio-hero .composer-input input,.studio-hero .composer-input input:focus{color:#eef3ec}
+.studio-hero .composer-input input::placeholder{color:#7e8a80}
+.studio-hero .composer-input>svg{color:#869389}
+.studio-hero .composer-bar{padding:5px 12px 12px}
+.studio-hero .chip{background:#20282e;color:#bac4b9}
+.studio-hero .chip:hover{background:#2b353b;color:#f0f5ec}
+.studio-hero .hint{color:#839086}
+.studio-hero .composer .btn:not(.primary){background:#20282e;color:#d7e0d5;border-color:#303c42}
+.content{max-width:1320px;padding-top:20px}
+#view .card,#view .tile{background:#151c21;border-color:#29343b;color:#eaf0e8}
+#view .card>h2,#view .card-head h2,#view .tile b,#view .empty b{color:#eef4eb}
+#view .sub,#view .help,#view .tile span{color:#9aa69d}
+#view .tile i{background:#26351e;color:#c6f432}
+#view .btn:not(.primary):not(.danger){background:#1b2329;color:#dce5db;border-color:#354149}
+#view .btn.ghost{background:transparent;border-color:transparent;color:#aab5ab}
+#view .btn:active{background:#29343b}
+#view :where(input:not([type=checkbox],[type=radio],[type=file],[type=range]),select,textarea),#view .composer,#view .pick-menu,#view .nstep,#view .range label,#view .seg{background:#10161a;color:#eaf0e8;border-color:#354149}
+#view input::placeholder,#view textarea::placeholder{color:#78847b}
+#view .composer.compact .chip,#view .composer.compact .ob,#view .composer.compact .nstep .ctl button,#view .composer.compact .tile-o{background:#1b2329}
+#view .composer.compact .lp,#view .composer.compact .range label{background:#1b2329}
+#view .composer.compact .tile-o[aria-pressed=true],#view .composer.compact .seg button[aria-pressed=true]{background:#2b3a20;color:#d9f5a0}
+#view .pick-opt,#view .pick-btn,#view .pick-new{color:#dce5db}
+#view .pick-opt:hover,#view .pick-new:hover{background:#202a30}
+#view .step{background:#1b2329;color:#eaf0e8}
+#view .step:hover{background:#263139}
+#view .set-link b,#view .set-sec h2{color:#eaf0e8}
+#view .set-link.on{background:#26351e}
+#view .set-link.on b{color:#d9f5a0}
+#view .chan,#view .ob,#view .note,#view .info,#view .composer-opts .ob{background:#171f24;color:#eaf0e8}
+#view .clip{background:#151c21;border-color:#29343b}
+#view .clip-body,#view .clip h3{color:#eaf0e8}
+#view table th{color:#a2aea5}
+#view table td{border-color:#29343b}
+#view .scroll{border-color:#29343b}
+#view .pill{background:#20292e;color:#b9c4b9}
+#view .pill.ok{background:#17372a;color:#74dfa9}
+#view .pill.warn{background:#302f1d;color:#d7ed8a}
+#view .pill.bad{background:#3c2226;color:#ff9aa1}
+#view .empty{border-color:#354149;color:#a2aea5}
+.studio-board{display:grid;gap:16px}
+.studio-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.studio-metric{position:relative;display:grid;grid-template-columns:1fr auto;gap:1px 10px;padding:15px 17px;background:#151c21;border:1px solid #29343b;border-radius:12px}
+.studio-metric>span{display:flex;align-items:center;gap:7px;color:#9eaaa0;font-size:12px}
+.studio-metric>span svg{width:15px;height:15px;color:#afce76}
+.studio-metric>b{grid-row:span 2;grid-column:2;align-self:center;font-size:25px;line-height:1;font-weight:650;font-variant-numeric:tabular-nums;color:#f1f5ee}
+.studio-metric>small{font-size:10px;color:#748078}
+.studio-main-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,.8fr);gap:16px;align-items:start}
+.studio-review,.studio-next,.studio-activity,.studio-creators,.studio-posts{padding:19px!important;margin:0!important}
+.studio-card-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:15px}
+.studio-card-head h2{margin:4px 0 2px!important;font-size:16px!important}
+.studio-card-head .sub{font-size:11px}
+.studio-count{white-space:nowrap;border:1px solid #46582f;background:#26351e;color:#d8f49e;border-radius:20px;padding:5px 9px;font-size:10px}
+.studio-review-list{display:grid;gap:8px}
+.studio-review-item{display:grid;grid-template-columns:50px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px;border:1px solid #29343b;border-radius:9px;background:#11181c}
+.studio-platform{display:grid;place-items:center;width:46px;height:46px;border-radius:8px;background:#222c31;color:#c2d197;font-size:10px;font-weight:650;text-align:center}
+.studio-review-copy{min-width:0;display:grid;gap:3px}
+.studio-review-copy b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;color:#edf3eb}
+.studio-review-copy span,.studio-review-copy small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;color:#9aa69d}
+.studio-review-copy small{color:#7e8a80}
+.studio-review-actions{display:flex;gap:5px;align-items:center}
+.studio-rail{display:grid;gap:12px}
+.studio-rail .ai-home{margin:0;padding:17px}
+.studio-rail .ai-home h2{color:#eaf0e8}
+.studio-rail .ai-big{color:#eaf0e8}
+.studio-rail .ai-sub,.studio-rail .ai-stats span{color:#9aa69d}
+.studio-rail .ai-stats{border-color:#29343b}
+.studio-rail .ai-stats div{border-color:#29343b}
+.studio-rail .ai-stats b{color:#eaf0e8}
+.studio-rail .studio-next-list{display:grid;gap:6px}
+.studio-next .step{padding:9px;border:1px solid #29343b}
+.studio-next .step .d{color:#87938a}
+.studio-lower-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);gap:16px}
+.studio-activity .chart .gl{stroke:#2a343b}
+.studio-activity .chart text{fill:#87938a}
+.studio-activity .chart .b2{fill:#74836a}
+.studio-activity .legend{color:#9aa69d;font-size:10px;margin:0}
+.studio-activity .legend i{width:8px;height:8px}
+.studio-creators .studio-card-head .btn{width:auto}
+.studio-creator-list{display:grid}
+.studio-creator{width:100%;display:flex;align-items:center;gap:9px;padding:9px 0;background:transparent;border:0;border-top:1px solid #29343b;color:#edf3eb;text-align:left;cursor:pointer}
+.studio-creator:hover{background:#192126}
+.studio-creator-avatar{display:grid;place-items:center;width:32px;height:32px;border-radius:9px;background:#293621;color:#d8f49e;font-weight:700}
+.studio-creator-name{display:grid;gap:2px;flex:1;min-width:0}
+.studio-creator-name b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px}
+.studio-creator-name small{font-size:10px;color:#8c998f}
+.studio-creator>svg{width:14px;height:14px;color:#758178}
+.studio-empty{display:flex;align-items:center;gap:12px;padding:22px 10px;color:#9aa69d}
+.studio-empty>svg{width:22px;height:22px;color:#a9c770}
+.studio-empty>div{display:grid;gap:3px}
+.studio-empty b{color:#eaf0e8;font-size:12px}
+.studio-empty span{font-size:11px;color:#8c998f}
+.studio-more{margin-top:12px;color:#9aa69d;font-size:11px}
+.studio-posts .card-head{margin-bottom:12px}
+dialog{background:#151c21;color:#eaf0e8;border:1px solid #354149}
+@media(max-width:1000px){.studio-main-grid,.studio-lower-grid{grid-template-columns:1fr}.studio-rail{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}}
+@media(max-width:700px){.studio-hero{padding:20px 16px 6px}.studio-intro{align-items:flex-start}.studio-intro h2{font-size:25px}.studio-new{height:34px;padding:0 9px;font-size:12px}.studio-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.studio-metric{padding:12px}.studio-review-item{grid-template-columns:42px minmax(0,1fr)}.studio-platform{width:40px;height:40px}.studio-review-actions{grid-column:2;flex-wrap:wrap}.studio-review-actions .btn{width:auto!important}.studio-card-head{align-items:flex-start;flex-wrap:wrap}.studio-lower-grid{grid-template-columns:1fr}}
+@media(max-width:440px){.studio-intro{flex-direction:column}.studio-review-item{gap:8px}.studio-review-copy b{white-space:normal}.studio-metric>span{font-size:10px}}
+.topbar .btn:not(.primary){background:#192126;color:#dce5db;border-color:#344047}
+.studio-lower-grid .ai-home{margin:0;padding:19px}
+.studio-lower-grid .ai-home h2,.studio-lower-grid .ai-big{color:#eef4eb}
+.studio-lower-grid .ai-sub,.studio-lower-grid .ai-stats span{color:#9aa69d}
+.studio-lower-grid .ai-stats,.studio-lower-grid .ai-stats div{border-color:#29343b}
+.studio-lower-grid .ai-stats b{color:#eaf0e8}
 </style>
 </head>
 <body>
@@ -838,7 +959,6 @@ dialog[open]{animation:fadein .16s ease}
 <div class="pop" id="bellpop" role="dialog" aria-label="Notifications" hidden></div>
 <div class="pop menu" id="acctpop" role="menu" hidden></div>
 
-<script src="/assets/gradient-ascii.js"></script>
 <script>
 /* ============================================================ helpers */
 const $ = (s, r = document) => r.querySelector(s);
@@ -942,8 +1062,8 @@ function startTour() {
      chips: [["link", "Paste a link"], ["scissors", "Get clips", 1], ["radio", "Live streams"], ["send", "Post them"]]},
     {t: "Start with any video", x: "Paste a YouTube, Twitch or Kick link here, or upload a file. FramePilot finds the best moments and makes each one a short with captions.",
      sel: "#addform", dock: "bottom", chips: [["link", "YouTube"], ["link", "Twitch"], ["link", "Kick"], ["up", "Upload", 1]]},
-    {t: "Your day at a glance", x: "Home shows what is recording, how many clips were made and posted today, and what is waiting to go out.",
-     sel: "#ov .tiles", dock: "bottom", chips: [["radio", "Recording"], ["scissors", "Clips today", 1], ["send", "Posted"], ["clock", "Waiting"]]},
+    {t: "Your day at a glance", x: "The studio shows what is recording, what is waiting for your approval, and what has been published today.",
+     sel: "#ov .studio-metrics", dock: "bottom", chips: [["radio", "Recording"], ["scissors", "Clips today", 1], ["send", "Posted"], ["clock", "Waiting"]]},
     {t: "Every video in one place", x: "All videos lists everything you have processed. Open a video to see its clips, trim them, change the captions or download them.",
      sel: '#nav [data-v="library"]', side: 1, dock: "bottom", chips: [["film", "All videos", 1], ["play", "Preview"], ["sliders", "Edit"], ["down", "Download"]]},
     {t: "Add the creators you clip", x: "Give each creator a workspace with their channels. FramePilot can record them when they go live and clip the highlights as they happen.",
@@ -1266,9 +1386,9 @@ function drawShell() {  const nav = (v, icon, label, extra = "") => `<button cla
       <button class="icon-btn bell" data-act="bell" title="Notifications" aria-label="Notifications${S.status.unread ? `, ${S.status.unread} new` : ""}" aria-haspopup="dialog">${ic("bell")}${S.status.unread ? `<span class="dotn">${S.status.unread > 9 ? "9+" : S.status.unread}</span>` : ""}</button></div>` : ""));
   const c = creator();
   const recording = S.creators.filter(x => x.live_job).length;
-  let title = {overview:"Home", library:"All videos", settings:"Settings", usage:"AI usage"}[S.view] || "", sub = "", act = "";
+  let title = {overview:"Creator studio", library:"All videos", settings:"Settings", usage:"AI usage"}[S.view] || "", sub = "", act = "";
   if (S.view === "usage") sub = "What the AI has been used for.";
-  if (S.view === "overview") sub = `${greeting()}. ${S.creators.length} creator${S.creators.length === 1 ? "" : "s"}${recording ? `, ${recording} recording now` : ""}.`;
+  if (S.view === "overview") sub = `Your workspace · ${S.creators.length} creator${S.creators.length === 1 ? "" : "s"}${recording ? ` · ${recording} recording now` : ""}`;
   if (S.view === "library") sub = "Every video and recording, across all creators.";
   if (S.view === "settings") sub = (S.status.accounts === false ? "Your AI key and connected apps." : "Your profile, security and connected apps.");
   let pic = "", subHtml = null, tabs = "";
@@ -1330,16 +1450,16 @@ function go(v, tab, fromHistory) {
   localStorage.setItem("view", v);
   $("#app").classList.remove("open");
   const view = $("#view");
-  if (window._gaStop) { window._gaStop(); window._gaStop = null; }
-  $("#heroSlot").innerHTML = v === "overview" ? `<section class="hero"><div class="ga-bg" id="appAscii" aria-hidden="true"></div><h2>What do you want to clip today?</h2>
-      <p>Paste a link or drop in videos. You get captioned shorts back.</p><div id="add"></div></section>` : "";
+  $("#heroSlot").innerHTML = v === "overview" ? `<section class="studio-hero">
+      <div class="studio-intro"><div><span class="studio-eyebrow">YOUR CREATOR STUDIO</span><h2>${esc(greeting())}${S.status.accounts !== false && S.status.user?.name ? `, ${esc(S.status.user.name.split(" ")[0])}` : ""}</h2>
+        <p>Turn long videos into standout clips. Review every post before it goes live.</p></div><button class="btn studio-new" data-act="newcreator">${ic("plus")}New creator</button></div>
+      <div id="add"></div></section>` : "";
   if (v === "overview") view.innerHTML = `<div id="ov"></div>`;
   else if (v === "library") view.innerHTML = `<div id="add"></div><div id="jobs"></div>`;
   else if (v === "settings") view.innerHTML = `<div id="sform"></div>`;
   else if (v === "usage") { view.innerHTML = `<div id="usage"></div>`; loadUsage(); }
   else view.innerHTML = `<div id="stream"></div><div id="cbody"></div>`;   // the live player stays put across tabs: no restart, no rebuffer
   if ($("#add")) drawAdd(v === "overview" ? "hero" : "compact");
-  if (v === "overview" && window.GradientASCII) { try { window._gaStop = GradientASCII($("#appAscii"), {colors: ["#c6f432", "#ffffff", "#dcf98a", "#ebfbb8", "#f7fde6"], shape: "horizon", lightMode: true, cellSize: 16, density: 0.8, glyphOpacity: 0.26, gradientOpacity: 0.32, glow: 0.06, grain: 0.06, mouseInteraction: false, clickEffect: "none"}); } catch {} }
   if (v === "settings") drawSettings();
   if (v.startsWith("c:")) setTab(S.ctab);
   $("#main").scrollTo(0, 0); render();
@@ -1924,16 +2044,18 @@ function drawOverview() {
   const state = r => r.state === "recording" ? `<span class="pill live"><span class="dot"></span>Recording</span>` : r.state === "waiting" ? `<span class="pill warn">Waiting for live</span>` : `<span class="pill">Idle</span>`;
   const pst = p => p.status === "posted" ? `<span class="pill ok">Posted</span>` : p.status === "sent_to_n8n" ? `<span class="pill ok">Sent to n8n</span>` : p.status === "needs_approval" ? `<span class="pill warn">Needs approval</span>` : p.status === "failed" ? `<span class="pill bad">Failed</span>` : p.status === "posting" ? `<span class="pill warn">Publishing now</span>` : `<span class="pill warn">${clock(p.due_at)}</span>`;
   const steps = nextSteps(o);
-  put(box, `<div class="tiles">
-      <div class="tile"><i>${ic("radio")}</i><b>${o.recording}</b><span>Recording now</span></div>
-      <div class="tile"><i>${ic("scissors")}</i><b>${sum("clips_today")}</b><span>Clips today</span></div>
-      <div class="tile"><i>${ic("send")}</i><b>${sum("posted_today")}</b><span>Posted today</span></div>
-      <div class="tile"><i>${ic(sum("failed") ? "warn" : "clock")}</i><b>${sum("queued")}</b><span>Waiting to post${sum("failed") ? ` · <span style="color:var(--bad)">${sum("failed")} failed</span>` : ""}</span></div></div>
-    <div class="home-grid">
-      <div class="card"><div class="card-head"><div><h2>Activity</h2><p class="sub">Last 14 days</p></div>
-          <div class="kpis"><div class="kpi"><b>${d14("clips")}</b><span>Clips made</span></div><div class="kpi"><b>${d14("posted")}</b><span>Posted</span></div>
-            <div class="kpi"><b>${sum("views").toLocaleString()}</b><span>Views</span></div><div class="kpi"><b>$${sum("earnings").toFixed(2)}</b><span>Est. earnings</span></div></div></div>
-        <div class="legend"><span><i style="background:var(--brand)"></i>Clips made</span><span><i style="background:var(--brand-ink)"></i>Posted</span></div>
+  const approvals = (o.posts || []).filter(p => p.status === "needs_approval");
+  const queueHistory = (o.posts || []).filter(p => p.status !== "needs_approval");
+  const approvalCard = `<section class="card studio-review"><div class="studio-card-head"><div><span class="studio-eyebrow">APPROVAL QUEUE</span><h2>Ready for your review</h2><p class="sub">${o.paused ? "Publishing is paused. Review clips here; nothing will be sent until you resume." : "Check each clip and approve it before it is published."}</p></div><span class="studio-count">${approvals.length} waiting</span></div>
+    ${approvals.length ? `<div class="studio-review-list">${approvals.slice(0, 4).map(p => `<article class="studio-review-item"><div class="studio-platform">${esc(PLAT[p.platform]?.name || "Post")}</div><div class="studio-review-copy"><b>${esc(p.title)}</b><span>${esc(p.creator_name || "No creator")} · ${esc(p.account_name || "No account")}</span><small>${p.due_at ? clock(p.due_at) : "Ready to publish"}${p.error ? ` · ${esc(p.error)}` : ""}</small></div><div class="studio-review-actions"><button class="btn sm primary" data-act="papprove" data-id="${p.id}" data-account="${esc(p.account_name)}">Approve</button><button class="btn sm ghost" data-act="pcancel" data-id="${p.id}">Cancel</button></div></article>`).join("")}</div>` : `<div class="studio-empty">${ic("check")}<div><b>Nothing needs your approval</b><span>New clips will show up here when they are ready.</span></div></div>`}</section>`;
+  put(box, `<div class="studio-metrics">
+      <div class="studio-metric"><span>${ic("radio")}Recording</span><b>${o.recording}</b><small>live now</small></div>
+      <div class="studio-metric"><span>${ic("scissors")}Clips made</span><b>${sum("clips_today")}</b><small>today</small></div>
+      <div class="studio-metric"><span>${ic("send")}Published</span><b>${sum("posted_today")}</b><small>today</small></div>
+      <div class="studio-metric"><span>${ic("clock")}Waiting to post</span><b>${sum("queued")}</b><small>${sum("failed") ? `${sum("failed")} failed` : "queue clear"}</small></div></div>${approvalCard}
+    <div class="studio-lower-grid">
+      <div class="card studio-activity"><div class="card-head"><div><span class="studio-eyebrow">LAST 14 DAYS</span><h2>Studio activity</h2><p class="sub">${d14("clips")} clips made · ${d14("posted")} posted · ${sum("views").toLocaleString()} views</p></div><span class="studio-count">14 day view</span></div>
+        <div class="legend"><span><i style="background:var(--brand)"></i>Clips made</span><span><i style="background:#74836A"></i>Posted</span></div>
         ${barChart(o.daily || [])}</div>
       ${aiCard()}
     </div>
@@ -1943,11 +2065,11 @@ function drawOverview() {
       ${o.creators.length ? `<div class="scroll"><table><tr><th>Creator</th><th>Status</th><th>Publishing</th><th class="num">Clips today</th><th class="num">Posted today</th><th class="num">Waiting</th><th class="num">Failed</th><th class="num">Views</th><th class="num">Est. $</th></tr>
       ${o.creators.map(r => `<tr><td><a class="lnk" href="#" data-act="go" data-v="c:${esc(r.id)}">${esc(r.name)}</a></td><td>${state(r)}</td><td><span class="pill">Approval required</span></td><td class="num">${r.clips_today} <span class="sub">/ ${r.clips_total}</span></td><td class="num">${r.posted_today} <span class="sub">/ ${r.posted_total}</span></td><td class="num">${r.queued}</td><td class="num">${r.failed}</td><td class="num">${r.views.toLocaleString()}</td><td class="num">${r.earnings.toFixed(2)}</td></tr>`).join("")}</table></div>`
       : `<div class="empty"><img src="/brand/favicon.svg" alt=""><b>No creators yet</b>Add one to give each streamer their own workspace.</div>`}</div>
-    <div class="card"><div class="card-head"><div><h2>Publishing queue</h2><p class="sub">${o.paused ? "Paused. Recording and clipping carry on; nothing is published." : "Every post requires your approval before it is sent."}</p></div>
+    <div class="card studio-posts"><div class="card-head"><div><span class="studio-eyebrow">PUBLISHING</span><h2>Recent posts</h2><p class="sub">${o.paused ? "Paused. Recording and clipping carry on; nothing is published." : "Every post requires your approval before it is sent."}</p></div>
         <button class="btn ${o.paused ? "primary" : ""}" data-act="pause">${ic(o.paused ? "play" : "pause")}${o.paused ? "Resume posting" : "Pause all publishing"}</button></div>
-      ${o.posts.length ? `<div class="scroll"><table class="stack"><tr><th>When</th><th>Clip</th><th>Creator</th><th>Account</th><th class="num">Views</th><th></th></tr>
-      ${o.posts.map(p => `<tr><td data-l="Status">${pst(p)}</td><td data-l="Clip" class="c-main">${p.url ? `<a class="lnk" href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.title)}</a>` : esc(p.title)}${p.error ? `<div class="err" style="margin:2px 0 0">${esc(p.error)}</div>` : ""}</td><td data-l="Creator">${esc(p.creator_name || "None")}</td><td data-l="Account">${esc(p.account_name)}</td><td data-l="Views" class="num">${p.views ?? "–"}</td>
-        <td class="c-act" style="text-align:right">${p.status === "needs_approval" ? `<button class="btn sm primary" data-act="papprove" data-id="${p.id}" data-account="${esc(p.account_name)}">Approve</button><button class="btn sm" data-act="pcancel" data-id="${p.id}">Cancel</button>` : p.status === "scheduled" ? `<button class="btn sm" data-act="pcancel" data-id="${p.id}">Cancel</button>` : p.status === "failed" ? `<button class="btn sm" data-act="pretry" data-id="${p.id}">Approve &amp; retry</button>` : ""}</td></tr>`).join("")}</table></div>`
+      ${queueHistory.length ? `<div class="scroll"><table class="stack"><tr><th>When</th><th>Clip</th><th>Creator</th><th>Account</th><th class="num">Views</th><th></th></tr>
+  ${queueHistory.map(p => `<tr><td data-l="Status">${pst(p)}</td><td data-l="Clip" class="c-main">${p.url ? `<a class="lnk" href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.title)}</a>` : esc(p.title)}${p.error ? `<div class="err" style="margin:2px 0 0">${esc(p.error)}</div>` : ""}</td><td data-l="Creator">${esc(p.creator_name || "None")}</td><td data-l="Account">${esc(p.account_name)}</td><td data-l="Views" class="num">${p.views ?? "–"}</td>
+        <td class="c-act" style="text-align:right">${p.status === "scheduled" ? `<button class="btn sm" data-act="pcancel" data-id="${p.id}">Cancel</button>` : p.status === "failed" ? `<button class="btn sm" data-act="pretry" data-id="${p.id}">Approve &amp; retry</button>` : ""}</td></tr>`).join("")}</table></div>`
       : `<p class="help">Nothing queued or posted yet.</p>`}</div>`);
 }
 
