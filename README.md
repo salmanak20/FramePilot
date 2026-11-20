@@ -2,7 +2,7 @@
 
 <p align="center"><img src="docs/framepilot-banner.svg" alt="FramePilot — turn long videos into shorts worth sharing" width="100%"></p>
 
-> Based on [PeakCut](https://github.com/haziqahmedqasmi/peakcut) (MIT License). Rebranded and modified as FramePilot.
+> 
 > Open **`SETUP-GUIDE.html`** for the desktop setup guide.
 
 FramePilot turns long videos and live streams into **captioned vertical clips** for Reels, Shorts and TikTok. It runs in a desktop window on your computer, is free and open source, and does not require a FramePilot sign-in. You approve every post before it is published.
