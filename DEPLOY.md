@@ -77,7 +77,7 @@ Without SMTP on an HTTPS site, no reset emails can be sent.
 ## A server that already runs other sites
 
 Leave `COMPOSE_PROFILES=own-https` out of `.env`. FramePilot then listens only on `127.0.0.1:8765` and the web
-server that is already there forwards the domain to it: see `deploy/nginx-clipkontrast.conf`, or
+server that is already there forwards the domain to it: see `deploy/nginx-framepilot.conf`, or
 `deploy/docker-compose.traefik.yml` for Traefik.
 
 ## Cloudflare CDN in front

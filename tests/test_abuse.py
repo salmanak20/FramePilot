@@ -1,4 +1,4 @@
-"""Abuse and limit tests against a throwaway ClipKontrast server. Usage: test_abuse.py <base url> <project root>"""
+"""Abuse and limit tests against a throwaway Frame Pilot server. Usage: test_abuse.py <base url> <project root>"""
 import sys
 
 import httpx

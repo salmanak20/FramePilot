@@ -4,14 +4,14 @@ A short map for contributors and AI coding assistants.
 
 ## Installing or updating FramePilot for someone
 
-**Before installing, ask the person where to put it**, and suggest a short, permanent folder: `C:\clipkontrast` on
-Windows, `~/clipkontrast` on a Mac or Linux. Do not just clone into the folder you happen to be running in: AI assistants
+**Before installing, ask the person where to put it**, and suggest a short, permanent folder: `C:\FramePilot` on
+Windows, `~/FramePilot` on a Mac or Linux. Do not just clone into the folder you happen to be running in: AI assistants
 often run in a temporary, scratch or session workspace, which gets deleted, and whose path is long enough that
 Windows cannot load the speech library (Windows can't open files whose full path is over 260 characters; the error
 is "DLL load failed ... The filename or extension is too long"). Tell the person where you put it.
 
 **When updating**, look at where FramePilot is first. If its folder path is long (roughly over 100 characters) or inside
-a temporary or assistant workspace, ask the person whether to move it to `C:\clipkontrast` (or `~/clipkontrast`) as part of the
+a temporary or assistant workspace, ask the person whether to move it to `C:\FramePilot` (or `~/FramePilot`) as part of the
 update. Moving is safe when done like this: clone the latest version into the new folder, copy over `.env`,
 `storage.json` and the `data` folder if there is one (the videos and clips; `storage.json` may point to a data folder
 elsewhere, which then stays where it is), install the requirements, start it from the new folder, check the clips

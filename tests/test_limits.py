@@ -1,4 +1,4 @@
-"""No limits by default on your own ClipKontrast: many recordings at once (each kept with its own creator), five videos
+"""No limits by default on your own Frame Pilot: many recordings at once (each kept with its own creator), five videos
 at once, any number of creators. Runs against the code directly, with its own empty data folder."""
 import os, sys, tempfile
 os.environ["CLIPKONTRAST_DATA"] = tempfile.mkdtemp(prefix="pc-lim-")

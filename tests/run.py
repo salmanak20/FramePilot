@@ -2,7 +2,7 @@
 
     python tests/run.py
 
-Starts ClipKontrast on a spare port with an empty, temporary data folder, runs the tests against it, then stops it and
+Starts Frame Pilot on a spare port with an empty, temporary data folder, runs the tests against it, then stops it and
 deletes the folder. Your real data and your running server are never touched. No AI key is needed: the tests cover accounts, permissions, limits and the queue, not clip quality."""
 import os
 import shutil

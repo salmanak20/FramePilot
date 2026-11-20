@@ -1,5 +1,5 @@
 # The speech-to-text machine: the same code, built for a graphics card (NVIDIA, CUDA 12).
-# Build from the project root:  docker build -f deploy/gpu/Dockerfile -t clipkontrast-asr .
+# Build from the project root:  docker build -f deploy/gpu/Dockerfile -t framepilot-asr .
 FROM python:3.11-slim
 
 RUN apt-get update \
