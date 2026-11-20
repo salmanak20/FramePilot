@@ -49,7 +49,7 @@ def _mirror(p):
     job = jobs.get(p["job"])
     clip = next((c for c in job["clips"] if c["id"] == p["clip"]), None) if job else None
     if clip is not None:
-        clip.setdefault("posts", {})[p["id"]] = {k: p.get(k) for k in ("account_name", "platform", "status", "url", "due_at", "error")}
+        clip.setdefault("posts", {})[p["id"]] = {k: p.get(k) for k in ("account_name", "platform", "status", "url", "due_at", "error", "permanent_error")}
         jobs.save(job)
 
 
@@ -156,7 +156,8 @@ def _post(p):
     except Exception as e:  # noqa: BLE001
         p["tries"] += 1
         p["error"] = str(e)[-300:]
-        if p["tries"] < 3 and clip and acc:
+        p["permanent_error"] = isinstance(e, accounts.PermanentPostError)
+        if p["tries"] < 3 and clip and acc and not p["permanent_error"]:
             p.update(status="scheduled", due_at=time.time() + 600)  # try again in 10 minutes
         else:
             p["status"] = "failed"
@@ -227,6 +228,8 @@ def retry(pid):
         p = next((p for p in _mine() if p["id"] == pid), None)
         if not p or p["status"] not in ("failed", "cancelled"):
             raise ValueError("Only failed or cancelled posts can be retried.")
+        if p.get("permanent_error"):
+            raise ValueError("YouTube rejected this upload. Check its YouTube Studio notice, fix the clip, and approve a new post instead of retrying the same file.")
         p.update(status="scheduled", due_at=time.time(), tries=0, error=None)
         _save()
     _mirror(p)

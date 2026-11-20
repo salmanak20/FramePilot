@@ -309,6 +309,10 @@ def _check(r, what):
 
 
 # ------------------------------------------------------------------ YouTube
+class PermanentPostError(RuntimeError):
+    """YouTube rejected this clip for a content or account reason; retrying the same file won't help."""
+
+
 def youtube_ready() -> bool:
     return can_connect("youtube")
 
@@ -359,6 +363,31 @@ def youtube_upload(acc, path: Path, title: str, description: str, tags: list, pr
         done = _check(httpx.put(start.headers["Location"], content=f.read(),
                                 headers={"Authorization": f"Bearer {token}", "Content-Type": "video/mp4"}, timeout=900),
                       "Uploading to YouTube").json()
+    status = done.get("status") or {}
+    upload_status = status.get("uploadStatus")
+    if upload_status in {"rejected", "failed", "deleted"}:
+        reason = status.get("rejectionReason") or status.get("failureReason") or upload_status
+        if upload_status == "failed" and reason == "uploadAborted":
+            raise RuntimeError("YouTube says the upload was interrupted. FramePilot will retry it automatically.")
+        messages = {
+            "claim": "YouTube rejected this upload after a Content ID claim. Check YouTube Studio → Content → Restrictions for the matched material and affected regions. Use material you own or have permission to publish; FramePilot cannot clear a claim.",
+            "copyright": "YouTube rejected this upload for copyright. Check the restriction details in YouTube Studio and use material you own or have permission to publish.",
+            "duplicate": "YouTube rejected this as a duplicate. Check YouTube Studio and upload an original clip instead.",
+            "inappropriate": "YouTube rejected this upload under its content rules. Check the notice in YouTube Studio.",
+            "legal": "YouTube rejected this upload for a legal reason. Check the notice in YouTube Studio.",
+            "length": "YouTube rejected this upload because of its length. Check the current limits for your channel and format.",
+            "termsOfUse": "YouTube rejected this upload under its terms. Check the notice in YouTube Studio.",
+            "trademark": "YouTube rejected this upload for a trademark issue. Check the notice in YouTube Studio.",
+            "codec": "YouTube could not process this video codec. Re-make the clip and try again.",
+            "conversion": "YouTube could not convert this video. Re-make the clip and try again.",
+            "emptyFile": "YouTube received an empty video file. Re-make the clip and try again.",
+            "invalidFile": "YouTube could not read this video file. Re-make the clip and try again.",
+            "tooSmall": "YouTube says this video file is too small to process.",
+            "uploadAborted": "YouTube reports that the upload was interrupted. Check the video in YouTube Studio before retrying.",
+            "uploaderAccountClosed": "YouTube rejected the upload because the channel is closed.",
+            "uploaderAccountSuspended": "YouTube rejected the upload because the channel is suspended.",
+        }
+        raise PermanentPostError(messages.get(reason, f"YouTube rejected this upload ({reason}). Check YouTube Studio for details."))
     return done["id"], f"https://www.youtube.com/shorts/{done['id']}"
 
 
