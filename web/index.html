@@ -933,6 +933,43 @@ dialog{background:#151c21;color:#eaf0e8;border:1px solid #354149}
 .studio-lower-grid .ai-sub,.studio-lower-grid .ai-stats span{color:#9aa69d}
 .studio-lower-grid .ai-stats,.studio-lower-grid .ai-stats div{border-color:#29343b}
 .studio-lower-grid .ai-stats b{color:#eaf0e8}
+/* Keep controls readable in every overlay, including dialogs rendered outside #view. */
+.btn{background:#1b2329;color:#eaf0e8;border-color:#354149}
+.btn:hover{background:#263139;border-color:#46545d}
+.btn.primary,.btn.primary:hover{background:#c6f432;color:#18200c;border-color:#c6f432}
+.btn.danger,.btn.danger:hover{background:#3c2226;color:#ff9aa1;border-color:#60343a}
+.btn.ghost{background:transparent;color:#c5cec5;border-color:transparent}
+.btn.ghost:hover{background:#202a30;color:#f0f5ec}
+.btn:disabled{opacity:1;background:#222b30;color:#9aa69d;border-color:#354149;cursor:not-allowed}
+.btn.primary:disabled{background:#29351f;color:#b3cb7a;border-color:#39472b}
+label.ck{background:#1b2329;color:#dce5db;border-color:#46535b}
+label.ck:hover{border-color:#75837c}
+label.ck:has(input:checked){background:#2b3a20;color:#d9f5a0;border-color:#46582f}
+:where(input:not([type=checkbox],[type=radio],[type=file],[type=range]),select,textarea){background:#10161a;color:#edf3eb;border-color:#46535b;caret-color:#c6f432}
+:where(input:not([type=checkbox],[type=radio],[type=file],[type=range]),select,textarea):hover{border-color:#75837c}
+:where(input:not([type=checkbox],[type=radio],[type=file],[type=range]),select,textarea):focus{background:#10161a;border-color:#c6f432}
+input::placeholder,textarea::placeholder{color:#9aa69d;opacity:1}
+select option{background:#151c21;color:#edf3eb}
+dialog{background:#151c21;color:#eaf0e8;border-color:#46535b}
+dialog :where(input:not([type=checkbox],[type=radio],[type=file],[type=range]),select,textarea){background:#10161a;color:#edf3eb;border-color:#46535b}
+.pop{background:#151c21;color:#eaf0e8;border-color:#354149}
+.pop-head h3,.pop.menu .who2 b{color:#eef4eb}
+.pop-head button,.pop.menu button{color:#dce5db}
+.pop-head button:hover,.pop.menu button:hover,.nt:hover{background:#202a30;color:#f0f5ec}
+.pop.menu .who2 span,.pop-empty,.nt span{color:#b1bcb3}
+.nt b{color:#eef4eb}
+.nt small{color:#9aa69d}
+.nt.k-expiry i{background:#3a3020;color:#f0c47a}
+.nt.k-post i,.nt.k-fail i{background:#3c2226;color:#ff9aa1}
+.nt.k-live i{background:#3c2226;color:#ff8c95}
+.nt.k-clips i{background:#19382c;color:#74dfa9}
+.clip-draft{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 11px;border:1px solid #405132;border-radius:8px;background:#1c281b;color:#d7e8bd;font-size:12px}
+.clip-draft button{border:0;background:transparent;color:#d8f49e;font:inherit;text-decoration:underline;cursor:pointer}
+.clip-draft[hidden]{display:none}
+.net-warning{display:flex;align-items:center;justify-content:center;gap:10px;padding:9px 16px;background:#3c2226;color:#ffd9dc;border-bottom:1px solid #60343a;font-size:12px}
+.net-warning svg{width:16px;height:16px;color:#ff9aa1}
+.net-warning button{background:transparent;border:0;color:#fff;text-decoration:underline;font:inherit;font-weight:650;cursor:pointer}
+@media(max-width:700px){.net-warning{align-items:flex-start;flex-wrap:wrap}.clip-draft{align-items:flex-start;flex-direction:column}}
 </style>
 </head>
 <body>
@@ -1173,9 +1210,9 @@ function startTour() {
 }
 
 /* ============================================================ state */
-const S = {status:{styles:{}, layouts:{}}, jobs:[], creators:[], accounts:[], overview:null, settings:null,
+const S = {status:{styles:{}, layouts:{}}, jobs:[], creators:[], accounts:[], overview:null, settings:null, connectionError:false,
            view:"overview", ctab:"clips"};
-const D = {jid:null, cid:null, sig:""};
+const D = {jid:null, cid:null, sig:"", draftKey:null};
 const creatorId = () => S.view.startsWith("c:") ? S.view.slice(2) : null;
 const creator = () => S.creators.find(c => c.id === creatorId());
 const jobOf = id => S.jobs.find(j => j.id === id);
@@ -1413,10 +1450,11 @@ function drawShell() {  const nav = (v, icon, label, extra = "") => `<button cla
   try { upSeen = localStorage.getItem("clipkontrast_update_seen") || ""; } catch {}
   const upBar = up && up.latest !== upSeen ? `<div class="vb" role="status">${ic("up")}<span>${up.restart ? "<b>The new version is downloaded.</b> Close FramePilot and start it again to use it." : `A new version of FramePilot is out${up.behind ? `: <b>${up.behind} update${up.behind === 1 ? "" : "s"}</b> since yours` : ""}.`}</span>
     <button class="btn sm primary" data-act="updhow">${up.restart ? "What's new" : "How to update"}</button><button class="btn sm ghost" data-act="updlater" aria-label="Hide until the next version">Later</button></div>` : "";
+  const netBar = S.connectionError || navigator.onLine === false ? `<div class="net-warning" role="alert">${ic("warn")}<span><b>Connection interrupted.</b> Recent changes may not have synced. FramePilot will retry automatically.</span><button data-act="retrysync">Retry now</button></div>` : "";
   const toolBar = S.status.no_ffmpeg ? `<div class="vb" role="alert">${ic("warn")}<span><b>FramePilot can't make clips yet: ffmpeg isn't installed on this computer.</b> Open a terminal, run <code>winget install Gyan.FFmpeg</code> (Mac: <code>brew install ffmpeg</code>, Linux: <code>sudo apt install ffmpeg</code>), then close FramePilot and start it again.</span></div>` : "";
   const aiBar = !toolBar && S.status.ai?.problem && me?.is_admin && S.view !== "settings" ? `<div class="vb" role="status">${ic("warn")}<span><b>The AI isn't answering.</b> ${esc(S.status.ai.problem)} Until then, clips are picked by loudness.</span><button class="btn sm primary" data-act="go" data-v="settings" data-tab="ai">Open AI settings</button></div>` : "";
   const diskBar = !toolBar && S.status.disk_full && S.view !== "settings" ? `<div class="vb" role="alert">${ic("warn")}<span><b>The drive FramePilot saves to is almost full, so it can't take new videos.</b> Free up space on it, or move FramePilot's folder to a bigger drive.</span>${me?.is_admin ? `<button class="btn sm primary" data-act="go" data-v="settings" data-tab="storage">Open Storage</button>` : ""}</div>` : "";
-  put($("#vbanner"), toolBar ? toolBar : diskBar ? diskBar : aiBar ? aiBar : upBar ? upBar : me && me.verified === false ? `<div class="vb" role="status">${ic("warn")}<span>Confirm your email to start clipping. We sent a link to <b>${esc(me.email)}</b>.</span><button class="btn sm" data-act="resendverify">Send a new link</button></div>`
+  put($("#vbanner"), netBar ? netBar : toolBar ? toolBar : diskBar ? diskBar : aiBar ? aiBar : upBar ? upBar : me && me.verified === false ? `<div class="vb" role="status">${ic("warn")}<span>Confirm your email to start clipping. We sent a link to <b>${esc(me.email)}</b>.</span><button class="btn sm" data-act="resendverify">Send a new link</button></div>`
     : kk && kk.ready === false && S.view !== "usage" ? `<div class="vb" role="status">${ic("bolt")}<span>${me?.is_admin ? "Add your AI key to let the AI pick clips and write titles. Until then, clips are picked by loudness." : "The AI isn't set up on this server yet, so clips are picked by loudness."}</span>${me?.is_admin && S.view !== "settings" ? `<button class="btn sm primary" data-act="go" data-v="settings" data-tab="ai">${ic("plus")}Add AI key</button>` : ""}</div>` : "");
   put($("#tpic"), pic); $("#tpic").classList.toggle("live", !!(c && (c.live_job || liveOn(c).length)));
   put($("#utabs"), tabs); moveInd(); $(".topbar").classList.toggle("tabbed", !!tabs);
@@ -2256,9 +2294,39 @@ async function saveSettings() { const d = {}; $$("#sform [data-s]").forEach(i =>
 
 /* ============================================================ clip editor */
 function openClip(jid, cid) { D.jid = jid; D.cid = cid; D.sig = ""; drawClipDlg(true); $("#clipdlg").showModal(); }
+function clipFormValues() {
+  const values = {};
+  $$("#clipdlg [data-f]").forEach(i => { values[i.dataset.f] = i.type === "checkbox" ? i.checked : i.type === "number" ? Number(i.value) : i.value; });
+  return values;
+}
+function clipBaseline(c) {
+  return {hook:c.hook ?? "", captions:c.captions !== false, style:c.style ?? "", layout:c.layout ?? "", start:Number(c.start), end:Number(c.end), title:c.title ?? "", description:c.description ?? ""};
+}
+function clipHasPending(c) { return JSON.stringify(clipFormValues()) !== JSON.stringify(clipBaseline(c)); }
+function setClipDraftStatus(message, pending) {
+  const box = $("#clipDraftStatus"); if (!box) return;
+  box.hidden = !pending; const label = $("span", box); if (label) label.textContent = message;
+}
+function saveClipDraft() {
+  if (!D.jid || !D.cid || !D.draftKey) return;
+  const c = jobOf(D.jid)?.clips.find(x => x.id === D.cid); if (!c) return;
+  if (!clipHasPending(c)) {
+    try { localStorage.removeItem(D.draftKey); } catch {}
+    setClipDraftStatus("No unsaved edits.", false); return;
+  }
+  try {
+    localStorage.setItem(D.draftKey, JSON.stringify({version:c.version, values:clipFormValues(), savedAt:Date.now()}));
+    setClipDraftStatus("Draft saved on this device. Save and re-make the clip to apply these edits.", true);
+  } catch { setClipDraftStatus("Could not save a local draft. Save and re-make before closing this editor.", true); }
+}
+function clearClipDraft() {
+  if (D.draftKey) try { localStorage.removeItem(D.draftKey); } catch {}
+  setClipDraftStatus("No unsaved edits.", false);
+}
 function drawClipDlg(full) {
   const j = jobOf(D.jid), c = j?.clips.find(x => x.id === D.cid), dlg = $("#clipdlg");
   if (!c) { if (dlg.open) dlg.close(); return; }
+  D.draftKey = `framepilot.clipdraft.${j.id}.${c.id}.${c.version}`;
   const m = `/media/${j.id}/`, sig = c.status + c.version;
   const stage = c.status === "done" ? `<video src="${m}${esc(c.file)}?v=${c.version}" poster="${m}${esc(c.cover)}?v=${c.version}" controls autoplay playsinline></video>`
     : c.status === "error" ? `<div class="err" style="padding:20px;text-align:center">${esc(c.error || "Could not make this clip.")}</div>`
@@ -2279,6 +2347,7 @@ function drawClipDlg(full) {
         <label class="f">Title<input data-f="title" value="${esc(c.title)}"></label>
         <label class="f">Description<textarea data-f="description" rows="2">${esc(c.description)}</textarea></label>
         <button class="btn" data-act="remake">${ic("scissors")}Save and re-make clip</button>
+        <div class="clip-draft" id="clipDraftStatus" role="status" hidden><span></span><button data-act="draftclear">Discard draft</button></div>
         <h3>Review and publish</h3>
         <div id="dposts" class="row" style="gap:4px"></div>
         ${S.accounts.length ? `<div class="row">${S.accounts.map(a => `<label class="ck"><input type="checkbox" data-pacc value="${esc(a.id)}">${esc(a.label)} · ${esc(a.name)}</label>`).join("")}</div>
@@ -2288,12 +2357,22 @@ function drawClipDlg(full) {
           ${c.status === "done" ? `<a class="btn" href="${m}${esc(c.file)}?download=1">${ic("down")}Download</a>` : ""}
           <button class="btn" data-act="copy" data-j="${j.id}" data-c="${esc(c.id)}">${ic("copy")}Copy post text</button></div>
       </div></div>`;
+    let draft = null;
+    try { const saved = JSON.parse(localStorage.getItem(D.draftKey) || "null"); if (saved?.version === c.version && saved.values && typeof saved.values === "object") draft = saved.values; } catch {}
+    if (draft) {
+      $$("#clipdlg [data-f]").forEach(i => { if (Object.prototype.hasOwnProperty.call(draft, i.dataset.f)) { if (i.type === "checkbox") i.checked = !!draft[i.dataset.f]; else i.value = draft[i.dataset.f]; } });
+      $("#clipdlg [data-f=captions]")?.dispatchEvent(new Event("change", {bubbles:true}));
+      if (clipHasPending(c)) setClipDraftStatus("Recovered draft from this device. Save and re-make the clip to apply these edits.", true);
+      else { try { localStorage.removeItem(D.draftKey); } catch {} }
+    }
   } else if (D.sig !== sig) $("#stage").innerHTML = stage;
   D.sig = sig;
   put($("#dposts"), postPills(c));
 }
 $("#clipdlg").addEventListener("close", () => { $("#clipdlg").innerHTML = ""; D.jid = null; });
 $("#clipdlg").addEventListener("click", e => { if (e.target === e.currentTarget) e.currentTarget.close(); });
+$("#clipdlg").addEventListener("input", e => { if (e.target.matches("[data-f]")) saveClipDraft(); });
+$("#clipdlg").addEventListener("change", e => { if (e.target.matches("[data-f]")) saveClipDraft(); });
 
 /* ============================================================ render + polling */
 function render() {
@@ -2309,6 +2388,7 @@ async function tick() {
     S.syncV = got.v;
     if (!fresh) {                                   // nothing of ours changed on the server
       if (S.view === "overview" && stale) { S.overview = await api("/api/overview"); S.ovAt = Date.now(); render(); }
+      if (S.connectionError) { S.connectionError = false; drawShell(); }
       return;
     }
     const {jobs, creators, accounts} = got;
@@ -2319,9 +2399,12 @@ async function tick() {
     if (got.unread != null) S.status.unread = got.unread;
     if (S.view === "overview") { S.overview = await api("/api/overview"); S.ovAt = Date.now(); }
     if (creatorId() && !creator()) return go("overview");
+    S.connectionError = false;
     render();
-  } catch {}
+  } catch { if (!S.connectionError) { S.connectionError = true; drawShell(); } }
 }
+window.addEventListener("offline", () => { S.connectionError = true; drawShell(); });
+window.addEventListener("online", () => tick());
 // Back on the tab (or window): ask straight away instead of waiting out the slow background timer, and put a
 // live player that fell behind while hidden back at the live edge.
 let hiddenAt = 0;
@@ -2425,6 +2508,8 @@ document.addEventListener("click", async e => {
     if (a === "pickfile") return $("#file").click();
     if (a === "addmore") { const u = $("#url"); return u && !u.value ? (u.focus(), toast("Paste another link, or drop a file anywhere on the box.")) : $("#file").click(); }
     if (a === "closedlg") return $("#clipdlg").close();
+    if (a === "retrysync") return tick();
+    if (a === "draftclear") { clearClipDraft(); D.sig = ""; drawClipDlg(true); return toast("Local draft discarded"); }
     if (a === "openclip") return openClip(d.j, d.c);
     if (a === "newcreator") {
       const dlg = $("#formdlg");
@@ -2592,12 +2677,14 @@ document.addEventListener("click", async e => {
       await api(`/api/accounts/${d.id}`, {method:"DELETE"}); await tick(); return drawSettings();
     }
     if (a === "remake") {
-      const body = {}; $$("#clipdlg [data-f]").forEach(i => {
-        body[i.dataset.f] = i.type === "checkbox" ? i.checked : i.type === "number" ? Number(i.value) : i.value;
-      });
-      await send(`/api/jobs/${D.jid}/clips/${D.cid}/render`, body); toast("Re-making the clip…", "ok"); return tick();
+      const body = clipFormValues(), clipJob = jobOf(D.jid);
+      if (!Number.isFinite(body.start) || !Number.isFinite(body.end) || body.start < 0 || body.end <= body.start) return toast("Check the clip times: the end must be after the start.", "bad");
+      if (clipJob?.duration && body.end > clipJob.duration) return toast("The end time is past the end of this video.", "bad");
+      await send(`/api/jobs/${D.jid}/clips/${D.cid}/render`, body); clearClipDraft(); toast("Re-making the clip…", "ok"); return tick();
     }
     if (a === "postnow" || a === "postqueue") {
+      const clip = jobOf(D.jid)?.clips.find(x => x.id === D.cid);
+      if (clip && clipHasPending(clip)) return toast("Save and re-make this clip before approving, so your latest edits are included.", "bad");
       const accs = $$("#clipdlg [data-pacc]:checked").map(i => i.value);
       if (!accs.length) return toast("Tick at least one account first.", "bad");
       if (!await ask("Approve this post?", `This clip will be sent to ${accs.length} selected account${accs.length > 1 ? "s" : ""}${a === "postqueue" ? " at its scheduled time" : " now"}.`, "Approve & publish")) return;
