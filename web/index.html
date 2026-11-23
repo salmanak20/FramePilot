@@ -1540,6 +1540,9 @@ function drawAdd(variant) {
       <div class="ob"><div class="ot">Video quality</div><input type="hidden" id="o_quality" value="720"><div class="seg" role="group" aria-label="Video quality">
         <button type="button" data-seg="o_quality" data-v="720" aria-pressed="true">720p<small>Fast</small></button>
         <button type="button" data-seg="o_quality" data-v="1080" aria-pressed="false">1080p<small>Sharper, about 2x slower</small></button></div></div>
+      <div class="ob wide"><div class="ot">Branding / Outro</div><label class="sw"><input type="checkbox" id="o_branded_outro" checked>Append Minute Dose outro (2.7s)</label>
+        <label class="sw"><input type="checkbox" id="o_outro_sound" checked>Play reveal sound</label>
+        <a class="btn sm" href="/api/outro/preview" target="_blank" rel="noopener">Preview outro</a></div>
       <div class="ob"><div class="ot">Part of the video</div><div class="range">
         <label>From<input id="o_from" type="number" min="0" placeholder="start" aria-label="From minute">min</label>${ic("arrowr")}
         <label>To<input id="o_to" type="number" min="0" placeholder="end" aria-label="Up to minute">min</label></div></div>
@@ -1602,7 +1605,7 @@ document.addEventListener("keydown", e => {
 const targetCreator = () => creatorId() || $("#o_creator")?.value || "";
 function jobOptions() {
   const n = id => { const v = $(id).value; return v === "" ? null : Number(v); };
-  const o = {max_clips:n("#o_max"), min_len:n("#o_min"), max_len:n("#o_maxlen"), captions:$("#o_captions").checked, style:$("#o_style").value, layout:$("#o_layout").value, quality:n("#o_quality")};
+  const o = {max_clips:n("#o_max"), min_len:n("#o_min"), max_len:n("#o_maxlen"), captions:$("#o_captions").checked, style:$("#o_style").value, layout:$("#o_layout").value, quality:n("#o_quality"), branded_outro:$("#o_branded_outro").checked, outro_sound:$("#o_outro_sound").checked};
   if (n("#o_from") !== null) o.range_start = n("#o_from") * 60;
   if (n("#o_to") !== null) o.range_end = n("#o_to") * 60;
   return o;
@@ -2300,7 +2303,7 @@ function clipFormValues() {
   return values;
 }
 function clipBaseline(c) {
-  return {hook:c.hook ?? "", captions:c.captions !== false, style:c.style ?? "", layout:c.layout ?? "", start:Number(c.start), end:Number(c.end), title:c.title ?? "", description:c.description ?? ""};
+  return {hook:c.hook ?? "", captions:c.captions !== false, style:c.style ?? "", layout:c.layout ?? "", start:Number(c.start), end:Number(c.end), branded_outro:c.branded_outro !== false, outro_sound:c.outro_sound !== false, title:c.title ?? "", description:c.description ?? ""};
 }
 function clipHasPending(c) { return JSON.stringify(clipFormValues()) !== JSON.stringify(clipBaseline(c)); }
 function setClipDraftStatus(message, pending) {
@@ -2343,6 +2346,10 @@ function drawClipDlg(full) {
           <label class="f">Layout<select data-f="layout">${opts(S.status.layouts, c.layout)}</select></label></div>
         <div class="two"><label class="f">Start (seconds)<input data-f="start" type="number" step="0.5" value="${c.start}"></label>
           <label class="f">End (seconds)<input data-f="end" type="number" step="0.5" value="${c.end}"></label></div>
+        <h3>Branding / Outro</h3>
+        <label class="sw"><input data-f="branded_outro" type="checkbox" ${c.branded_outro === false ? "" : "checked"}>Append Minute Dose outro (2.7s)</label>
+        <label class="sw"><input data-f="outro_sound" type="checkbox" ${c.outro_sound === false ? "" : "checked"}>Play reveal sound</label>
+        <a class="btn sm" href="/api/outro/preview" target="_blank" rel="noopener">Preview outro</a>
         <h3>Post text</h3>
         <label class="f">Title<input data-f="title" value="${esc(c.title)}"></label>
         <label class="f">Description<textarea data-f="description" rows="2">${esc(c.description)}</textarea></label>

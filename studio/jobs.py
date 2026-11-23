@@ -110,7 +110,7 @@ _lock = threading.RLock()
 on_clip_ready: list = []   # callbacks (job, clip), run once when a clip first finishes
 
 DEFAULTS = {"max_clips": 6, "min_len": 15, "max_len": 60, "style": "bounce", "layout": "blur", "quality": 720,
-            "range_start": None, "range_end": None, "captions": True}
+            "range_start": None, "range_end": None, "captions": True, "branded_outro": True, "outro_sound": True}
 
 
 LIMITS = {"max_clips": (1, 20), "min_len": (5, 120), "max_len": (10, 180), "quality": (360, 1080)}
@@ -123,6 +123,11 @@ def clean_options(options) -> dict:
         if k == "captions":
             if not isinstance(v, bool):
                 raise ValueError("Captions must be on or off.")
+            out[k] = v
+            continue
+        if k in ("branded_outro", "outro_sound"):
+            if not isinstance(v, bool):
+                raise ValueError("Outro options must be on or off.")
             out[k] = v
             continue
         if k not in DEFAULTS or v in ("", None):
@@ -350,6 +355,9 @@ def request_render(jid, cid, changes: dict):
     new = dict(clip)
     if "captions" in changes:
         new.update(clean_options({"captions": changes["captions"]}))
+    for key in ("branded_outro", "outro_sound"):
+        if key in changes:
+            new.update(clean_options({key: changes[key]}))
     for k in ("start", "end"):
         if k in changes:
             new[k] = round(float(changes[k]), 2)
@@ -781,7 +789,8 @@ def _run_job(job):
         for c in found:
             c.update(id=f"clip{len(job['clips']) + 1:02d}", start=round(c["start"] + shift, 2),
                      end=round(c["end"] + shift, 2), style=o["style"], layout=o["layout"],
-                     captions=o.get("captions", True), status="queued", version=0)
+                     captions=o.get("captions", True), branded_outro=o.get("branded_outro", True),
+                     outro_sound=o.get("outro_sound", True), status="queued", version=0)
             # Only the gameplay layout uses a webcam, so it is only looked for then, and only once: a
             # stream with no webcam is not looked for again on every clip of it.
             if o["layout"] == "gameplay" and face is False:
