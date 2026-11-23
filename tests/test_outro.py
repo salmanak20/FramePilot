@@ -58,6 +58,17 @@ def main():
         assert abs(float(actual["format"]["duration"]) - 3.9) < 0.15
         print("PASS actual vertical export: 1080x1920, source audio plus synchronized outro")
 
+        silent_source = root / "portrait-silent.mp4"
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i",
+            "testsrc2=size=240x426:rate=30:duration=1.2", "-c:v", "libx264", "-pix_fmt", "yuv420p",
+            str(silent_source)], check=True, timeout=60)
+        silent_export = render.render_clip(silent_source, exported, "silent-clip", {"start":0, "end":1.2,
+            "layout":"crop", "captions":False, "branded_outro":True, "outro_sound":True}, [], 240, 426)
+        silent_actual = probe(exported / silent_export["file"])
+        assert abs(float(silent_actual["format"]["duration"]) - 3.9) < 0.15
+        assert any(s["codec_type"] == "audio" for s in silent_actual["streams"])
+        print("PASS actual silent-source export: sound effect and valid audio stream")
+
         preview = outro.preview()
         preview_info = probe(preview)
         assert abs(float(preview_info["format"]["duration"]) - outro.DURATION) < 0.15
