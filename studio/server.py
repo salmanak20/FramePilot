@@ -22,7 +22,7 @@ from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Redirect
 from . import admin as admins
 from . import account, load
 from . import (accounts, ai, alerts, auth, config, creators, ctx, db, jobs, live, media, posting,
-               profiles, render, safe, transcribe, usage)
+               profiles, render, safe, transcribe, usage, outro)
 
 from . import tools as _tools  # noqa: E402
 
@@ -435,6 +435,11 @@ def favicon():
 
 
 # ================================================================ sign up, sign in, sign out
+@app.get("/api/outro/preview")
+def outro_preview():
+    return FileResponse(outro.preview(), media_type="video/mp4", headers={"Cache-Control": "private, max-age=3600"})
+
+
 @app.get("/api/public")
 def public_config():
     from . import mailer
